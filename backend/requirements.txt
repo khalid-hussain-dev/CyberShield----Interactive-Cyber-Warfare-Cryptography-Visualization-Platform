@@ -3,3 +3,6 @@ Flask-SocketIO>=5.6,<6
 cryptography>=46,<47
 PyJWT>=2.10,<3
 pytest>=8,<9
+gunicorn>=23,<24
+eventlet>=0.36,<0.37
+psycopg2-binary>=2.9,<3
