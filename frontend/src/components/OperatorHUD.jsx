@@ -48,7 +48,17 @@ export function OperatorScore({ token, scoreRef }) {
     if (scoreRef) scoreRef.current = refresh
   }, [scoreRef, refresh])
 
-  if (!score) return null
+  if (!score) {
+    return (
+      <div className="inline-flex items-center gap-2.5 rounded-lg border border-cyber-muted/30 bg-cyber-panelSoft px-3 py-1.5 text-xs opacity-50">
+        <span className="text-base leading-none">⏳</span>
+        <div className="min-w-0">
+          <p className="font-bold leading-tight">Loading...</p>
+          <div className="h-1 w-16 rounded-full bg-cyber-border mt-1 animate-pulse" />
+        </div>
+      </div>
+    )
+  }
 
   const colorClass = RANK_COLORS[score.rank] || RANK_COLORS.Trainee
   const nextInfo = score.next_rank_info || {}
