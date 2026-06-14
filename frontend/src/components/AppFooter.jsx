@@ -72,22 +72,13 @@ export default function AppFooter() {
         {/* Left — branding */}
         <div className="footer-brand">
           <div className="footer-logo-ring">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path
-                d="M12 2L3 7v5c0 5.25 3.75 10.15 9 11.35C17.25 22.15 21 17.25 21 12V7L12 2Z"
-                fill="rgba(59,130,246,0.18)"
-                stroke="#3b82f6"
-                strokeWidth="1.5"
-                strokeLinejoin="round"
-              />
-              <path
-                d="M9 12l2 2 4-4"
-                stroke="#3b82f6"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            <img
+              src="/logos/favicon.png"
+              alt="CyberShield Logo"
+              width="32"
+              height="32"
+              style={{ borderRadius: '50%', objectFit: 'cover', display: 'block' }}
+            />
           </div>
           <div>
             <p className="footer-brand-name">CyberShield</p>

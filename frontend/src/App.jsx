@@ -271,7 +271,7 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-cyber-background text-cyber-text flex-col">
+    <div className="flex min-h-screen bg-cyber-background text-cyber-text">
       {/* Sidebar backdrop */}
       {sidebarOpen && (
         <div
@@ -369,12 +369,12 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 min-w-0 overflow-y-auto">
+      <main className="flex-1 min-w-0">
         {actionOverlay ? <BrandLoader text={actionOverlay.text} tone={actionOverlay.tone} /> : null}
         <ActionNotice notice={notice} />
 
-        {/* ── Sticky Navbar ── */}
-        <div className="sticky-navbar px-4 py-3 sm:px-6 lg:px-8 mb-4">
+        {/* ── Fixed Navbar ── */}
+        <div className="sticky-navbar px-4 py-3 sm:px-6 lg:px-8">
           <header className="mx-auto max-w-[1480px] rounded-lg border border-cyber-border bg-cyber-panel/80 px-4 py-4 shadow-panel">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div className="min-w-0">
@@ -461,6 +461,9 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
           </div>
         </header>
         </div>
+
+        {/* Spacer so content isn't hidden behind the fixed navbar */}
+        <div className="sticky-navbar-spacer" />
 
         <div className="px-4 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-[1480px] flex-col gap-4">
