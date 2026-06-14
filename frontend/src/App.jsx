@@ -1,5 +1,6 @@
 import { useMemo, useState, useEffect, useCallback, useRef } from 'react'
 import { Activity, BookOpen, Download, GitCompare, LockKeyhole, LogOut, Menu, Play, Radar, RotateCcw, Shield, Sword, Terminal, Trophy, Zap } from 'lucide-react'
+import AppFooter from './components/AppFooter'
 import ActionNotice from './components/ActionNotice'
 import AuthGate from './components/AuthGate'
 import BackendStatus from './components/BackendStatus'
@@ -270,7 +271,7 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-cyber-background text-cyber-text">
+    <div className="flex min-h-screen bg-cyber-background text-cyber-text flex-col">
       {/* Sidebar backdrop */}
       {sidebarOpen && (
         <div
@@ -290,65 +291,76 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
         </div>
         
         <nav className="space-y-1.5">
-          <button
-            onClick={() => { setSidebarOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
-            className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-cyber-text hover:bg-cyber-panelSoft transition"
-          >
-            <Activity className="h-4 w-4 text-cyber-blue" />
-            Dashboard HUD
-          </button>
-          
-          <button
-            onClick={() => { setSidebarOpen(false); onViewPlayground(); }}
-            className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-cyber-text hover:bg-cyber-panelSoft transition"
-          >
-            <Zap className="h-4 w-4 text-cyber-blue" />
-            Crypto Sandbox
-          </button>
+          {[
+            {
+              id: 'nav-dashboard',
+              label: 'Dashboard HUD',
+              icon: <Activity className="h-4 w-4 text-cyber-blue" />,
+              onClick: () => { setSidebarOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); },
+            },
+            {
+              id: 'nav-sandbox',
+              label: 'Crypto Sandbox',
+              icon: <Zap className="h-4 w-4 text-cyber-blue" />,
+              onClick: () => { setSidebarOpen(false); onViewPlayground(); },
+            },
+            {
+              id: 'nav-ids',
+              label: 'AI-IDS Monitor',
+              icon: <Shield className="h-4 w-4 text-cyber-green" />,
+              onClick: () => { setSidebarOpen(false); document.getElementById('ids-analysis')?.scrollIntoView({ behavior: 'smooth' }); },
+            },
+            {
+              id: 'nav-blockchain',
+              label: 'Blockchain Ledger',
+              icon: <GitCompare className="h-4 w-4 text-cyber-yellow" />,
+              onClick: () => { setSidebarOpen(false); document.getElementById('blockchain-explorer')?.scrollIntoView({ behavior: 'smooth' }); },
+            },
+            {
+              id: 'nav-leaderboard',
+              label: 'Cyber Leaderboard',
+              icon: <Trophy className="h-4 w-4 text-cyber-yellow" />,
+              onClick: () => { setSidebarOpen(false); document.getElementById('leaderboard')?.scrollIntoView({ behavior: 'smooth' }); },
+            },
+            {
+              id: 'nav-duel',
+              label: '⚔ Duel Mode',
+              icon: <Sword className="h-4 w-4 text-cyber-red" />,
+              onClick: () => { setSidebarOpen(false); onViewDuel(); },
+            },
+            {
+              id: 'nav-explain',
+              label: 'Explain Mode',
+              icon: <BookOpen className="h-4 w-4 text-cyber-blue" />,
+              onClick: () => { setSidebarOpen(false); document.getElementById('explain-mode')?.scrollIntoView({ behavior: 'smooth' }); },
+            },
+          ].map(({ id, label, icon, onClick }) => (
+            <button
+              key={id}
+              id={id}
+              onClick={(e) => {
+                // Ripple effect
+                const btn = e.currentTarget
+                const ripple = document.createElement('span')
+                const rect = btn.getBoundingClientRect()
+                const size = Math.max(rect.width, rect.height)
+                ripple.className = 'ripple'
+                ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size / 2}px;top:${e.clientY - rect.top - size / 2}px`
+                btn.appendChild(ripple)
+                setTimeout(() => ripple.remove(), 550)
+                onClick()
+              }}
+              className="sidebar-nav-btn flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-cyber-text hover:bg-cyber-panelSoft"
+            >
+              {icon}
+              {label}
+            </button>
+          ))}
 
           <button
-            onClick={() => { setSidebarOpen(false); document.getElementById('ids-analysis')?.scrollIntoView({ behavior: 'smooth' }); }}
-            className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-cyber-text hover:bg-cyber-panelSoft transition"
-          >
-            <Shield className="h-4 w-4 text-cyber-green" />
-            AI-IDS Monitor
-          </button>
-
-          <button
-            onClick={() => { setSidebarOpen(false); document.getElementById('blockchain-explorer')?.scrollIntoView({ behavior: 'smooth' }); }}
-            className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-cyber-text hover:bg-cyber-panelSoft transition"
-          >
-            <GitCompare className="h-4 w-4 text-cyber-yellow" />
-            Blockchain Ledger
-          </button>
-
-          <button
-            onClick={() => { setSidebarOpen(false); document.getElementById('leaderboard')?.scrollIntoView({ behavior: 'smooth' }); }}
-            className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-cyber-text hover:bg-cyber-panelSoft transition"
-          >
-            <Trophy className="h-4 w-4 text-cyber-yellow" />
-            Cyber Leaderboard
-          </button>
-
-          <button
-            onClick={() => { setSidebarOpen(false); onViewDuel(); }}
-            className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-cyber-text hover:bg-cyber-panelSoft transition"
-          >
-            <Sword className="h-4 w-4 text-cyber-red" />
-            ⚔ Duel Mode
-          </button>
-
-          <button
-            onClick={() => { setSidebarOpen(false); document.getElementById('explain-mode')?.scrollIntoView({ behavior: 'smooth' }); }}
-            className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-cyber-text hover:bg-cyber-panelSoft transition"
-          >
-            <BookOpen className="h-4 w-4 text-cyber-blue" />
-            Explain Mode
-          </button>
-
-          <button
+            id="nav-signout"
             onClick={() => { setSidebarOpen(false); authSession.logout(); }}
-            className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-cyber-muted hover:text-cyber-red hover:bg-cyber-red/10 transition mt-8"
+            className="sidebar-nav-btn flex w-full items-center gap-3 rounded-md px-3 py-2 text-xs font-semibold text-cyber-muted hover:text-cyber-red hover:bg-cyber-red/10 mt-8"
           >
             <LogOut className="h-4 w-4" />
             Sign Out
@@ -357,12 +369,13 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 min-w-0 px-4 py-4 sm:px-6 lg:px-8 overflow-y-auto">
+      <main className="flex-1 min-w-0 overflow-y-auto">
         {actionOverlay ? <BrandLoader text={actionOverlay.text} tone={actionOverlay.tone} /> : null}
         <ActionNotice notice={notice} />
 
-        <div className="mx-auto flex max-w-[1480px] flex-col gap-4">
-          <header className="rounded-lg border border-cyber-border bg-cyber-panel px-4 py-4 shadow-panel">
+        {/* ── Sticky Navbar ── */}
+        <div className="sticky-navbar px-4 py-3 sm:px-6 lg:px-8 mb-4">
+          <header className="mx-auto max-w-[1480px] rounded-lg border border-cyber-border bg-cyber-panel/80 px-4 py-4 shadow-panel">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div className="min-w-0">
                 <div className="flex items-center gap-3">
@@ -447,7 +460,10 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
             </div>
           </div>
         </header>
+        </div>
 
+        <div className="px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex max-w-[1480px] flex-col gap-4">
         <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {simulationState.metrics.map((metric) => (
             <MetricCard key={metric.label} metric={metric} />
@@ -573,8 +589,12 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
             <SecurityComparison comparison={comparison} />
           </SectionPanel>
         </section>
-      </div>
-    </main>
+        </div>
+        </div>
+
+        {/* ── Footer ── */}
+        <AppFooter />
+      </main>
   </div>
   )
 }

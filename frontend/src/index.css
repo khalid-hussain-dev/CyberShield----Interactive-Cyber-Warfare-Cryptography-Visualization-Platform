@@ -10,6 +10,7 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --navbar-h: 80px;
 }
 
 * {
@@ -18,6 +19,8 @@
 
 html {
   background: #0b1020;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--navbar-h) + 16px);
 }
 
 body {
@@ -56,4 +59,188 @@ button:focus-visible {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #3b82f6;
+}
+
+/* ── Sticky Navbar ─────────────────────────────────── */
+.sticky-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  /* thin glow border at bottom when scrolled */
+  box-shadow: 0 1px 0 rgba(59, 130, 246, 0.15), 0 4px 24px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(11, 16, 32, 0.88);
+  border-bottom: 1px solid rgba(59, 130, 246, 0.10);
+  transition: box-shadow 0.3s ease;
+}
+
+/* ── Sidebar nav button scroll-highlight animation ─── */
+.sidebar-nav-btn {
+  position: relative;
+  overflow: hidden;
+  transition: background 0.22s ease, color 0.22s ease, transform 0.15s ease;
+}
+.sidebar-nav-btn::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(90deg, rgba(59,130,246,0.0), rgba(59,130,246,0.14));
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.sidebar-nav-btn:hover::after {
+  opacity: 1;
+}
+.sidebar-nav-btn:hover {
+  transform: translateX(3px);
+}
+.sidebar-nav-btn:active {
+  transform: translateX(1px) scale(0.98);
+}
+
+/* ripple on click */
+.sidebar-nav-btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.3);
+  transform: scale(0);
+  animation: ripple-burst 0.5s linear;
+  pointer-events: none;
+}
+@keyframes ripple-burst {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* ── Footer ────────────────────────────────────────── */
+.footer-root {
+  position: relative;
+  margin-top: 2rem;
+}
+
+.footer-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(59, 130, 246, 0.45) 30%,
+    rgba(52, 211, 153, 0.30) 70%,
+    transparent
+  );
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.6rem 2rem 1.8rem;
+  background: rgba(11, 16, 32, 0.78);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid rgba(59, 130, 246, 0.08);
+}
+
+/* Brand */
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.footer-logo-ring {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: rgba(59, 130, 246, 0.07);
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.15);
+  flex-shrink: 0;
+}
+.footer-brand-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #e2e8f0;
+  letter-spacing: 0.02em;
+  margin: 0;
+}
+.footer-brand-sub {
+  font-size: 0.68rem;
+  color: #64748b;
+  margin: 0;
+  margin-top: 1px;
+}
+
+/* Socials */
+.footer-socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+}
+.footer-social-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.38rem 0.85rem;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: inherit;
+  text-decoration: none;
+  color: var(--s-color, #e2e8f0);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  transition: background 0.22s ease, box-shadow 0.22s ease, transform 0.18s ease, border-color 0.22s ease;
+}
+.footer-social-btn:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: var(--s-color, #e2e8f0);
+  box-shadow: 0 0 14px var(--s-glow, rgba(255,255,255,0.15));
+  transform: translateY(-2px);
+}
+.footer-social-btn:active {
+  transform: translateY(0) scale(0.97);
+}
+
+/* Credits */
+.footer-credits {
+  text-align: right;
+}
+.footer-dev {
+  font-size: 0.75rem;
+  color: #94a3b8;
+  margin: 0;
+}
+.footer-dev-link {
+  color: #60a5fa;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s;
+}
+.footer-dev-link:hover {
+  color: #93c5fd;
+  text-decoration: underline;
+}
+.footer-copy {
+  font-size: 0.65rem;
+  color: #475569;
+  margin: 0;
+  margin-top: 2px;
+}
+
+@media (max-width: 768px) {
+  .footer-inner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.4rem 1.2rem;
+  }
+  .footer-credits {
+    text-align: center;
+  }
 }
