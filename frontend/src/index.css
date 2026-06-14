@@ -77,15 +77,28 @@ button:focus-visible {
   flex: 1;
   min-width: 0;
   height: 100%;
-  overflow: hidden;
+  /* Do NOT set overflow:hidden here — it clips position:fixed children (e.g. achievement modal) */
+  overflow: clip;
 }
 
 .main-header {
   flex-shrink: 0;
-  background: rgba(18, 26, 43, 0.9);
-  backdrop-filter: blur(12px);
+  position: relative;
+  /* Background via ::before so backdrop-filter doesn't create a stacking context
+     that traps position:fixed children (achievement modal, tooltips, etc.) */
   border-bottom: 1px solid #24324a;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  z-index: 20;
+}
+.main-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(18, 26, 43, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: -1;
+  pointer-events: none;
 }
 
 .main-content {

@@ -181,19 +181,8 @@ export default function NetworkVisualizer({ defenseEnabled, launched, packets = 
     ? '0 0 18px 4px rgba(239,68,68,0.95), 0 0 5px rgba(239,68,68,1)'
     : '0 0 18px 4px rgba(34,197,94,0.95),  0 0 5px rgba(34,197,94,1)'
 
-  // ── 2. INCOMING SIGNAL → ATTACKER (from bottom-left, only when attacking) ─
-  // Approaches from (28%, 88%) → (50%, 48%) during t∈[0.00, 0.40]
-  const IN_END    = 0.40
-  const inProgress = smoothstep(invlerp(0, IN_END, t))
-  const inLeft    = lerp(28, 50, inProgress)
-  const inTop     = lerp(90, 48, easeIn(inProgress))
-  const inScale   = lerp(0.6, 1.0, inProgress)
-  // Fade: in at t∈[0,0.06], full at t∈[0.06,0.32], out at t∈[0.32,IN_END]
-  const inFadeIn  = invlerp(0.00, 0.06, t)
-  const inFadeOut = 1 - invlerp(0.32, IN_END, t)
-  const inOpacity = !defenseEnabled && t <= IN_END
-    ? Math.min(inFadeIn, inFadeOut)
-    : 0
+  // ── 2. INCOMING SIGNAL → ATTACKER: removed per user request ─────────────
+  // Attack packet now only emits FROM the Attacker (Packet 3 below)
 
   // ── 3. ATTACK SHOT (Attacker → channel / bounce back on defense) ───────────
   // Fires at t=0.32, reaches y=28% at t=0.44 (no defense) or deflects at y=38% with defense
@@ -294,26 +283,7 @@ export default function NetworkVisualizer({ defenseEnabled, launched, packets = 
           />
         )}
 
-        {/* ── PACKET 2: Incoming signal → Attacker (attack mode only) ─────── */}
-        {launched && !defenseEnabled && (
-          <div
-            aria-hidden="true"
-            style={{
-              position:        'absolute',
-              left:            `${inLeft}%`,
-              top:             `${inTop}%`,
-              width:           '11px',
-              height:          '11px',
-              borderRadius:    '50%',
-              transform:       `translate(-50%, -50%) scale(${inScale})`,
-              pointerEvents:   'none',
-              zIndex:          20,
-              opacity:         inOpacity,
-              backgroundColor: '#EF4444',
-              boxShadow:       '0 0 12px 3px rgba(239,68,68,0.85)',
-            }}
-          />
-        )}
+        {/* ── PACKET 2: Removed — attack now clearly emits FROM the Attacker (Packet 3) ── */}
 
         {/* ── PACKET 3: Attack shot (Attacker → channel / bounce) ─────────── */}
         {launched && shotOpacity > 0.01 && (
