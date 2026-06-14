@@ -61,12 +61,10 @@ button:focus-visible {
   background: #3b82f6;
 }
 
-/* ── Fixed Navbar ──────────────────────────────────── */
+/* ── Sticky Navbar ──────────────────────────────────── */
 .sticky-navbar {
-  position: fixed;
+  position: sticky;
   top: 0;
-  left: 0;
-  right: 0;
   z-index: 20;
   box-shadow: 0 1px 0 rgba(59, 130, 246, 0.18), 0 4px 28px rgba(0, 0, 0, 0.60);
   backdrop-filter: blur(14px);

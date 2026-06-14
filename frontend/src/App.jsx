@@ -85,6 +85,7 @@ function App() {
 
 function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
   const scoreRef = useRef(null)
+  const mainRef = useRef(null)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [selectedScenarioId, setSelectedScenarioId] = useState('bank-mitm')
   const [defenseEnabled, setDefenseEnabled] = useState(false)
@@ -271,7 +272,7 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
   }
 
   return (
-    <div className="flex min-h-screen bg-cyber-background text-cyber-text">
+    <div className="flex h-screen overflow-hidden bg-cyber-background text-cyber-text">
       {/* Sidebar backdrop */}
       {sidebarOpen && (
         <div
@@ -296,7 +297,7 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
               id: 'nav-dashboard',
               label: 'Dashboard HUD',
               icon: <Activity className="h-4 w-4 text-cyber-blue" />,
-              onClick: () => { setSidebarOpen(false); window.scrollTo({ top: 0, behavior: 'smooth' }); },
+              onClick: () => { setSidebarOpen(false); mainRef.current?.scrollTo({ top: 0, behavior: 'smooth' }); },
             },
             {
               id: 'nav-sandbox',
@@ -308,19 +309,19 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
               id: 'nav-ids',
               label: 'AI-IDS Monitor',
               icon: <Shield className="h-4 w-4 text-cyber-green" />,
-              onClick: () => { setSidebarOpen(false); document.getElementById('ids-analysis')?.scrollIntoView({ behavior: 'smooth' }); },
+              onClick: () => { setSidebarOpen(false); document.getElementById('ids-analysis')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); },
             },
             {
               id: 'nav-blockchain',
               label: 'Blockchain Ledger',
               icon: <GitCompare className="h-4 w-4 text-cyber-yellow" />,
-              onClick: () => { setSidebarOpen(false); document.getElementById('blockchain-explorer')?.scrollIntoView({ behavior: 'smooth' }); },
+              onClick: () => { setSidebarOpen(false); document.getElementById('blockchain-explorer')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); },
             },
             {
               id: 'nav-leaderboard',
               label: 'Cyber Leaderboard',
               icon: <Trophy className="h-4 w-4 text-cyber-yellow" />,
-              onClick: () => { setSidebarOpen(false); document.getElementById('leaderboard')?.scrollIntoView({ behavior: 'smooth' }); },
+              onClick: () => { setSidebarOpen(false); document.getElementById('leaderboard')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); },
             },
             {
               id: 'nav-duel',
@@ -332,7 +333,7 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
               id: 'nav-explain',
               label: 'Explain Mode',
               icon: <BookOpen className="h-4 w-4 text-cyber-blue" />,
-              onClick: () => { setSidebarOpen(false); document.getElementById('explain-mode')?.scrollIntoView({ behavior: 'smooth' }); },
+              onClick: () => { setSidebarOpen(false); document.getElementById('explain-mode')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); },
             },
           ].map(({ id, label, icon, onClick }) => (
             <button
@@ -369,11 +370,11 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
       </aside>
 
       {/* Main Content Area */}
-      <main className="flex-1 min-w-0">
+      <main ref={mainRef} className="flex-1 min-w-0 h-full overflow-y-auto">
         {actionOverlay ? <BrandLoader text={actionOverlay.text} tone={actionOverlay.tone} /> : null}
         <ActionNotice notice={notice} />
 
-        {/* ── Fixed Navbar ── */}
+        {/* ── Sticky Navbar ── */}
         <div className="sticky-navbar px-4 py-3 sm:px-6 lg:px-8">
           <header className="mx-auto max-w-[1480px] rounded-lg border border-cyber-border bg-cyber-panel/80 px-4 py-4 shadow-panel">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -461,9 +462,6 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
           </div>
         </header>
         </div>
-
-        {/* Spacer so content isn't hidden behind the fixed navbar */}
-        <div className="sticky-navbar-spacer" />
 
         <div className="px-4 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-[1480px] flex-col gap-4">
