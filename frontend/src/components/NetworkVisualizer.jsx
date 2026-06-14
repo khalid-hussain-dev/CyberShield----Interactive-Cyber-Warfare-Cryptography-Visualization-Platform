@@ -29,7 +29,6 @@ function Node({ icon: Icon, label, meta, className, tone = 'blue' }) {
     </div>
   )
 }
-
 function Packet({ variant, launched, path }) {
   if (!launched) return null
 
@@ -43,7 +42,7 @@ function Packet({ variant, launched, path }) {
       }
     : {
         left: ['50%', '65%', '80%'],
-        top: ['48%', '57%', '66%'],
+        top: ['48%', '38%', '28%'],
         opacity: [0, 1, 1, 0]
       }
 
@@ -62,7 +61,6 @@ function Packet({ variant, launched, path }) {
     />
   )
 }
-
 function getVisualizationProfile(scenario, defenseEnabled) {
   const id = scenario?.id
 

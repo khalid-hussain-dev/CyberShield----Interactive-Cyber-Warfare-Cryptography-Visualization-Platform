@@ -272,7 +272,7 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
   }
 
   return (
-    <div className="flex h-screen overflow-hidden bg-cyber-background text-cyber-text">
+    <div className="dashboard-root text-cyber-text font-sans">
       {/* Sidebar backdrop */}
       {sidebarOpen && (
         <div
@@ -309,19 +309,19 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
               id: 'nav-ids',
               label: 'AI-IDS Monitor',
               icon: <Shield className="h-4 w-4 text-cyber-green" />,
-              onClick: () => { setSidebarOpen(false); document.getElementById('ids-analysis')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); },
+              onClick: () => { setSidebarOpen(false); document.getElementById('ids-analysis')?.scrollIntoView({ behavior: 'smooth' }); },
             },
             {
               id: 'nav-blockchain',
               label: 'Blockchain Ledger',
               icon: <GitCompare className="h-4 w-4 text-cyber-yellow" />,
-              onClick: () => { setSidebarOpen(false); document.getElementById('blockchain-explorer')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); },
+              onClick: () => { setSidebarOpen(false); document.getElementById('blockchain-explorer')?.scrollIntoView({ behavior: 'smooth' }); },
             },
             {
               id: 'nav-leaderboard',
               label: 'Cyber Leaderboard',
               icon: <Trophy className="h-4 w-4 text-cyber-yellow" />,
-              onClick: () => { setSidebarOpen(false); document.getElementById('leaderboard')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); },
+              onClick: () => { setSidebarOpen(false); document.getElementById('leaderboard')?.scrollIntoView({ behavior: 'smooth' }); },
             },
             {
               id: 'nav-duel',
@@ -333,7 +333,7 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
               id: 'nav-explain',
               label: 'Explain Mode',
               icon: <BookOpen className="h-4 w-4 text-cyber-blue" />,
-              onClick: () => { setSidebarOpen(false); document.getElementById('explain-mode')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); },
+              onClick: () => { setSidebarOpen(false); document.getElementById('explain-mode')?.scrollIntoView({ behavior: 'smooth' }); },
             },
           ].map(({ id, label, icon, onClick }) => (
             <button
@@ -369,14 +369,11 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
         </nav>
       </aside>
 
-      {/* Main Content Area */}
-      <main ref={mainRef} className="flex-1 min-w-0 h-full overflow-y-auto">
-        {actionOverlay ? <BrandLoader text={actionOverlay.text} tone={actionOverlay.tone} /> : null}
-        <ActionNotice notice={notice} />
-
-        {/* ── Sticky Navbar ── */}
-        <div className="sticky-navbar px-4 py-3 sm:px-6 lg:px-8">
-          <header className="mx-auto max-w-[1480px] rounded-lg border border-cyber-border bg-cyber-panel/80 px-4 py-4 shadow-panel">
+      {/* Right column wrapper */}
+      <div className="main-column">
+        {/* ── Fixed/Sticky Navbar ── */}
+        <header className="main-header px-4 py-3 sm:px-6 lg:px-8 z-20">
+          <div className="mx-auto max-w-[1480px]">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
               <div className="min-w-0">
                 <div className="flex items-center gap-3">
@@ -384,9 +381,9 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
                   <button
                     type="button"
                     onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-cyber-border bg-cyber-panelSoft text-cyber-text hover:border-cyber-blue transition-colors"
+                    className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-cyber-border bg-cyber-panelSoft text-cyber-text hover:border-cyber-blue transition-all"
                   >
-                    <Menu className="h-4 w-4" />
+                    <Menu className="h-5 w-5" />
                   </button>
                   <NavbarLogo tone={logoTone} />
                   <div>
@@ -396,206 +393,220 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
                 </div>
               </div>
 
-            <div className="flex flex-wrap items-center gap-2">
-              <BackendStatus health={backendHealth} />
-              <StatusPill tone={realtime.connection.status === 'online' ? 'green' : realtime.connection.status === 'connecting' ? 'yellow' : 'red'}>
-                {realtime.connection.status === 'online' ? 'Live' : realtime.connection.status === 'connecting' ? 'Sync' : 'Offline'}
-              </StatusPill>
-              <StatusPill tone={logoTone}>{!launched ? 'Neutral' : defenseEnabled ? 'Neutralized' : 'Under Attack'}</StatusPill>
-              <StatusPill tone={defenseEnabled ? 'green' : 'yellow'}>{defenseEnabled ? 'Defense ON' : 'Defense Ready'}</StatusPill>
-              <StatusPill tone="blue">{authSession.session.user.username}</StatusPill>
-              <OperatorScore token={authSession.session.token} scoreRef={scoreRef} />
-              <button
-                type="button"
-                title="Open Crypto Playground"
-                onClick={onViewPlayground}
-                className="inline-flex h-10 items-center gap-2 rounded-md border border-cyber-border bg-cyber-panelSoft px-3 text-sm font-semibold text-cyber-text transition hover:border-cyber-blue"
-              >
-                <Zap className="h-4 w-4 text-cyber-blue" aria-hidden="true" />
-                Sandbox
-              </button>
-              <button
-                type="button"
-                title={reportReady ? 'Export scenario report' : 'Report comparison data is loading'}
-                onClick={handleExportReport}
-                disabled={!reportReady}
-                className="inline-flex h-10 items-center gap-2 rounded-md border border-cyber-border bg-cyber-panelSoft px-3 text-sm font-semibold text-cyber-text transition hover:border-cyber-blue disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:border-cyber-border"
-              >
-                <Download className="h-4 w-4 text-cyber-blue" aria-hidden="true" />
-                Report
-              </button>
-              <button
-                type="button"
-                title="Launch scenario"
-                onClick={handleLaunch}
-                className="inline-flex h-10 items-center gap-2 rounded-md border border-cyber-border bg-cyber-panelSoft px-3 text-sm font-semibold text-cyber-text transition hover:border-cyber-blue"
-              >
-                <Play className="h-4 w-4 text-cyber-blue" aria-hidden="true" />
-                Launch
-              </button>
-              <button
-                type="button"
-                title="Activate defense"
-                onClick={handleDefend}
-                className="inline-flex h-10 items-center gap-2 rounded-md border border-cyber-border bg-cyber-panelSoft px-3 text-sm font-semibold text-cyber-text transition hover:border-cyber-green"
-              >
-                <LockKeyhole className="h-4 w-4 text-cyber-green" aria-hidden="true" />
-                Defend
-              </button>
-              <button
-                type="button"
-                title="Reset simulation"
-                onClick={handleReset}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-cyber-border bg-cyber-panelSoft text-cyber-muted transition hover:border-cyber-yellow hover:text-cyber-yellow"
-              >
-                <RotateCcw className="h-4 w-4" aria-hidden="true" />
-              </button>
-              <button
-                type="button"
-                title="Sign out"
-                onClick={authSession.logout}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-cyber-border bg-cyber-panelSoft text-cyber-muted transition hover:border-cyber-red hover:text-cyber-red"
-              >
-                <LogOut className="h-4 w-4" aria-hidden="true" />
-              </button>
+              <div className="flex flex-wrap items-center gap-2">
+                <BackendStatus health={backendHealth} />
+                <StatusPill tone={realtime.connection.status === 'online' ? 'green' : realtime.connection.status === 'connecting' ? 'yellow' : 'red'}>
+                  {realtime.connection.status === 'online' ? 'Live' : realtime.connection.status === 'connecting' ? 'Sync' : 'Offline'}
+                </StatusPill>
+                <StatusPill tone={logoTone}>{!launched ? 'Neutral' : defenseEnabled ? 'Neutralized' : 'Under Attack'}</StatusPill>
+                <StatusPill tone={defenseEnabled ? 'green' : 'yellow'}>{defenseEnabled ? 'Defense ON' : 'Defense Ready'}</StatusPill>
+                <StatusPill tone="blue">{authSession.session.user.username}</StatusPill>
+                <OperatorScore token={authSession.session.token} scoreRef={scoreRef} />
+                
+                <button
+                  type="button"
+                  title="Open Crypto Playground"
+                  onClick={onViewPlayground}
+                  className="inline-flex h-10 items-center gap-2 rounded-md border border-cyber-border bg-cyber-panelSoft px-3 text-sm font-semibold text-cyber-text transition hover:border-cyber-blue"
+                >
+                  <Zap className="h-4 w-4 text-cyber-blue" aria-hidden="true" />
+                  Sandbox
+                </button>
+                <button
+                  type="button"
+                  title={reportReady ? 'Export scenario report' : 'Report comparison data is loading'}
+                  onClick={handleExportReport}
+                  disabled={!reportReady}
+                  className="inline-flex h-10 items-center gap-2 rounded-md border border-cyber-border bg-cyber-panelSoft px-3 text-sm font-semibold text-cyber-text transition hover:border-cyber-blue disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:border-cyber-border"
+                >
+                  <Download className="h-4 w-4 text-cyber-blue" aria-hidden="true" />
+                  Report
+                </button>
+                <button
+                  type="button"
+                  title="Launch scenario"
+                  onClick={handleLaunch}
+                  className="inline-flex h-10 items-center gap-2 rounded-md border border-cyber-border bg-cyber-panelSoft px-3 text-sm font-semibold text-cyber-text transition hover:border-cyber-blue"
+                >
+                  <Play className="h-4 w-4 text-cyber-blue" aria-hidden="true" />
+                  Launch
+                </button>
+                <button
+                  type="button"
+                  title="Activate defense"
+                  onClick={handleDefend}
+                  className="inline-flex h-10 items-center gap-2 rounded-md border border-cyber-border bg-cyber-panelSoft px-3 text-sm font-semibold text-cyber-text transition hover:border-cyber-green"
+                >
+                  <LockKeyhole className="h-4 w-4 text-cyber-green" aria-hidden="true" />
+                  Defend
+                </button>
+                <button
+                  type="button"
+                  title="Reset simulation"
+                  onClick={handleReset}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-cyber-border bg-cyber-panelSoft text-cyber-muted transition hover:border-cyber-yellow hover:text-cyber-yellow"
+                >
+                  <RotateCcw className="h-4 w-4" aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  title="Sign out"
+                  onClick={authSession.logout}
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-cyber-border bg-cyber-panelSoft text-cyber-muted transition hover:border-cyber-red hover:text-cyber-red"
+                >
+                  <LogOut className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </div>
             </div>
           </div>
         </header>
-        </div>
 
-        <div className="px-5 sm:px-7 lg:px-10 pb-6">
-        <div className="mx-auto content-grid max-w-[1480px]">
-        <section className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4 fade-in-section">
-          {simulationState.metrics.map((metric) => (
-            <MetricCard key={metric.label} metric={metric} />
-          ))}
-        </section>
+        {/* Scrollable Main Content Area */}
+        <main ref={mainRef} className="main-content flex-1 min-w-0">
+          {actionOverlay ? <BrandLoader text={actionOverlay.text} tone={actionOverlay.tone} /> : null}
+          <ActionNotice notice={notice} />
 
-        <section className="grid grid-cols-1 gap-6 xl:grid-cols-[320px_minmax(0,1fr)_300px] fade-in-section">
-          <SectionPanel title="Scenario Engine" icon={Zap}>
-            <ScenarioRail scenarios={simulation.scenarios} selectedScenarioId={selectedScenarioId} onSelect={handleScenarioSelect} />
-          </SectionPanel>
+          <div className="px-4 py-4 sm:px-6 lg:px-8">
+            <div className="mx-auto flex max-w-[1480px] flex-col gap-6">
+              {/* KPI Metrics */}
+              <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+                {simulationState.metrics.map((metric) => (
+                  <MetricCard key={metric.label} metric={metric} />
+                ))}
+              </section>
 
-          <div className="flex flex-col gap-6">
-            <SectionPanel
-              title={selectedScenario?.name ?? 'Attack Visualization'}
-              icon={Radar}
-              action={
-                <div className="flex items-center gap-2">
-                  {realtime.error || simulation.error ? <StatusPill tone="yellow">Fallback</StatusPill> : null}
-                  <StatusPill tone={simulation.status === 'loading' ? 'yellow' : defenseEnabled ? 'green' : 'red'}>
-                    {simulation.status === 'loading' ? 'Syncing' : defenseEnabled ? 'Encrypted' : 'Plaintext'}
-                  </StatusPill>
+              {/* Main Workspace */}
+              <section className="grid grid-cols-1 gap-6 xl:grid-cols-[320px_minmax(0,1fr)_320px]">
+                <SectionPanel title="Scenario Engine" icon={Zap} tone="blue">
+                  <ScenarioRail scenarios={simulation.scenarios} selectedScenarioId={selectedScenarioId} onSelect={handleScenarioSelect} />
+                </SectionPanel>
+
+                <div className="flex flex-col gap-6">
+                  <SectionPanel
+                    title={selectedScenario?.name ?? 'Attack Visualization'}
+                    icon={Radar}
+                    tone={launched ? (defenseEnabled ? 'green' : 'red') : 'blue'}
+                    action={
+                      <div className="flex items-center gap-2">
+                        {realtime.error || simulation.error ? <StatusPill tone="yellow">Fallback</StatusPill> : null}
+                        <StatusPill tone={simulation.status === 'loading' ? 'yellow' : defenseEnabled ? 'green' : 'red'}>
+                          {simulation.status === 'loading' ? 'Syncing' : defenseEnabled ? 'Encrypted' : 'Plaintext'}
+                        </StatusPill>
+                      </div>
+                    }
+                  >
+                    <NetworkVisualizer
+                      defenseEnabled={defenseEnabled}
+                      launched={launched}
+                      packets={simulationState.packets}
+                      scenario={selectedScenario}
+                      channel={simulationState.channel}
+                    />
+                  </SectionPanel>
+
+                  {selectedScenarioId === 'packet-sniffing' && (
+                    <SectionPanel title="PCAP Forensic Dissector" icon={Terminal} tone={defenseEnabled ? 'green' : 'red'}>
+                      <ForensicDissector packets={simulationState.packets} launched={launched} />
+                    </SectionPanel>
+                  )}
                 </div>
-              }
-            >
-              <NetworkVisualizer
-                defenseEnabled={defenseEnabled}
-                launched={launched}
-                packets={simulationState.packets}
-                scenario={selectedScenario}
-                channel={simulationState.channel}
-              />
-            </SectionPanel>
 
-            {selectedScenarioId === 'packet-sniffing' && (
-              <SectionPanel title="PCAP Forensic Dissector" icon={Terminal}>
-                <ForensicDissector packets={simulationState.packets} launched={launched} />
-              </SectionPanel>
-            )}
-          </div>
+                <div className="grid gap-6">
+                  <SectionPanel title="Live Alerts" icon={Activity} tone="yellow">
+                    <EventFeed alerts={simulationState.alerts} />
+                  </SectionPanel>
 
-          <div className="grid gap-6">
-            <SectionPanel title="Live Alerts" icon={Activity}>
-              <EventFeed alerts={simulationState.alerts} />
-            </SectionPanel>
-
-            <SectionPanel title="Active Defenses" icon={Shield}>
-              <div className="space-y-3">
-                {simulationState.defenses.map((defense) => (
-                  <div key={defense.name} className="flex items-center justify-between gap-3 border-b border-cyber-border pb-3 last:border-b-0 last:pb-0">
-                    <span className="min-w-0 truncate text-sm text-cyber-text">{defense.name}</span>
-                    <StatusPill tone={defense.tone}>{defense.status}</StatusPill>
-                  </div>
-                ))}
-              </div>
-            </SectionPanel>
-          </div>
-        </section>
-
-        <section className="grid grid-cols-1 gap-6 lg:grid-cols-2 fade-in-section">
-          <SectionPanel title="Hacker Terminal" icon={Terminal}>
-            <TerminalStream entries={attackStream} tone="red" />
-          </SectionPanel>
-          <SectionPanel title="Defender Console" icon={Shield}>
-            <TerminalStream entries={defenseStream} tone="green" />
-          </SectionPanel>
-        </section>
-
-        <section className="grid grid-cols-1 gap-6 lg:grid-cols-2 fade-in-section">
-          <div id="ids-analysis" className="flex flex-col gap-6">
-            <SectionPanel title="AI-IDS Analysis" icon={Shield}>
-              <IDSPanel packets={simulationState.packets} token={authSession.session.token} />
-            </SectionPanel>
-          </div>
-
-          <SectionPanel title="Scenario Timeline" icon={Activity}>
-            <ScenarioTimeline events={realtime.events} />
-          </SectionPanel>
-        </section>
-
-        <section className="grid grid-cols-1 gap-6 lg:grid-cols-3 fade-in-section">
-          <SectionPanel title="Operator Audit Log" icon={Download}>
-            {auditHistory.length === 0 ? (
-              <p className="py-3 text-center text-xs text-cyber-muted">No audit records yet. Export a report to start archiving.</p>
-            ) : (
-              <div className="max-h-[300px] overflow-y-auto space-y-2">
-                {auditHistory.map((record) => (
-                  <div key={record.id} className="flex items-center justify-between gap-3 rounded-lg border border-cyber-border bg-cyber-panelSoft px-3 py-2 text-xs">
-                    <div className="min-w-0">
-                      <p className="truncate font-semibold text-cyber-text">{record.scenario_name}</p>
-                      <p className="text-cyber-muted">{record.created_at.slice(0, 16).replace('T', ' ')}</p>
+                  <SectionPanel title="Active Defenses" icon={Shield} tone="green">
+                    <div className="space-y-3">
+                      {simulationState.defenses.map((defense) => (
+                        <div key={defense.name} className="flex items-center justify-between gap-3 border-b border-cyber-border pb-3 last:border-b-0 last:pb-0">
+                          <span className="min-w-0 truncate text-sm text-cyber-text">{defense.name}</span>
+                          <StatusPill tone={defense.tone}>{defense.status}</StatusPill>
+                        </div>
+                      ))}
                     </div>
-                    <div className="flex shrink-0 items-center gap-2">
-                      <span className="rounded bg-cyber-red/20 px-1.5 py-0.5 font-mono text-[10px] text-red-200">{record.risk_score_before}</span>
-                      <span className="text-cyber-muted">→</span>
-                      <span className="rounded bg-cyber-green/20 px-1.5 py-0.5 font-mono text-[10px] text-green-200">{record.risk_score_after}</span>
+                  </SectionPanel>
+                </div>
+              </section>
+
+              {/* Console Streams */}
+              <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                <SectionPanel title="Hacker Terminal" icon={Terminal} tone="red">
+                  <TerminalStream entries={attackStream} tone="red" />
+                </SectionPanel>
+                <SectionPanel title="Defender Console" icon={Shield} tone="green">
+                  <TerminalStream entries={defenseStream} tone="green" />
+                </SectionPanel>
+              </section>
+
+              {/* AI-IDS & Scenario Timeline */}
+              <section className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                <div id="ids-analysis" className="flex flex-col gap-6">
+                  <SectionPanel title="AI-IDS Analysis" icon={Shield} tone="green">
+                    <IDSPanel packets={simulationState.packets} token={authSession.session.token} />
+                  </SectionPanel>
+                </div>
+
+                <SectionPanel title="Scenario Timeline" icon={Activity} tone="blue">
+                  <ScenarioTimeline events={realtime.events} />
+                </SectionPanel>
+              </section>
+
+              {/* Ledgers, Audits & Leaderboards */}
+              <section className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+                <SectionPanel title="Operator Audit Log" icon={Download} tone="blue">
+                  {auditHistory.length === 0 ? (
+                    <p className="py-3 text-center text-xs text-cyber-muted">No audit records yet. Export a report to start archiving.</p>
+                  ) : (
+                    <div className="max-h-[300px] overflow-y-auto space-y-2">
+                      {auditHistory.map((record) => (
+                        <div key={record.id} className="flex items-center justify-between gap-3 rounded-lg border border-cyber-border bg-cyber-panelSoft px-3 py-2 text-xs">
+                          <div className="min-w-0">
+                            <p className="truncate font-semibold text-cyber-text">{record.scenario_name}</p>
+                            <p className="text-cyber-muted">{record.created_at.slice(0, 16).replace('T', ' ')}</p>
+                          </div>
+                          <div className="flex shrink-0 items-center gap-2">
+                            <span className="rounded bg-cyber-red/20 px-1.5 py-0.5 font-mono text-[10px] text-red-200">{record.risk_score_before}</span>
+                            <span className="text-cyber-muted">→</span>
+                            <span className="rounded bg-cyber-green/20 px-1.5 py-0.5 font-mono text-[10px] text-green-200">{record.risk_score_after}</span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </SectionPanel>
+                  )}
+                </SectionPanel>
 
-          <div id="blockchain-explorer" className="flex flex-col gap-6">
-            <SectionPanel title="Blockchain Explorer" icon={Shield}>
-              <BlockchainExplorer token={authSession.session.token} />
-            </SectionPanel>
+                <div id="blockchain-explorer" className="flex flex-col gap-6">
+                  <SectionPanel title="Blockchain Explorer" icon={Shield} tone="blue">
+                    <BlockchainExplorer token={authSession.session.token} />
+                  </SectionPanel>
+                </div>
+
+                <div id="leaderboard" className="flex flex-col gap-6">
+                  <SectionPanel title="Cyber Range Leaderboard" icon={Activity} tone="blue">
+                    <Leaderboard token={authSession.session.token} />
+                  </SectionPanel>
+                </div>
+              </section>
+
+              {/* Explanations & Comparisons */}
+              <section className="grid grid-cols-1 gap-6 2xl:grid-cols-[minmax(0,1.08fr)_minmax(380px,0.92fr)]">
+                <div id="explain-mode" className="flex flex-col gap-6">
+                  <SectionPanel title="Explain Mode" icon={BookOpen} tone="blue">
+                    <ExplainModePanel explanation={explanation} />
+                  </SectionPanel>
+                </div>
+                <SectionPanel title="Before vs After" icon={GitCompare} tone="blue">
+                  <SecurityComparison comparison={comparison} />
+                </SectionPanel>
+              </section>
+            </div>
+
+            {/* ── Footer ── */}
+            <AppFooter />
           </div>
-
-          <div id="leaderboard" className="flex flex-col gap-6">
-            <SectionPanel title="Cyber Range Leaderboard" icon={Activity}>
-              <Leaderboard token={authSession.session.token} />
-            </SectionPanel>
-          </div>
-        </section>
-
-        <section className="grid grid-cols-1 gap-6 2xl:grid-cols-[minmax(0,1.08fr)_minmax(380px,0.92fr)] fade-in-section">
-          <div id="explain-mode" className="flex flex-col gap-6">
-            <SectionPanel title="Explain Mode" icon={BookOpen}>
-              <ExplainModePanel explanation={explanation} />
-            </SectionPanel>
-          </div>
-          <SectionPanel title="Before vs After" icon={GitCompare}>
-            <SecurityComparison comparison={comparison} />
-          </SectionPanel>
-        </section>
-        </div>
-        </div>
-
-        {/* ── Footer ── */}
-        <AppFooter />
-      </main>
+        </main>
+      </div>
   </div>
   )
 }
