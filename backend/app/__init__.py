@@ -11,7 +11,10 @@ from app.utils.responses import error_response
 
 
 def create_app(config_overrides=None):
-    app = Flask(__name__)
+    import os
+    dist_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..', 'frontend', 'dist'))
+
+    app = Flask(__name__, static_folder=dist_dir, static_url_path='/')
     app.config.from_object(Config)
 
     if config_overrides:
@@ -23,6 +26,18 @@ def create_app(config_overrides=None):
     socketio.init_app(app)
     register_socket_events(socketio)
     register_duel_events(socketio)
+
+    @app.route('/', defaults={'path': ''})
+    @app.route('/<path:path>')
+    def serve_frontend(path):
+        if path.startswith('api/'):
+            return error_response('Endpoint not found', status_code=404)
+        if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
+            return app.send_static_file(path)
+        else:
+            if not os.path.exists(os.path.join(app.static_folder, 'index.html')):
+                return "Frontend build not found. Please run 'npm run build' in the frontend directory.", 404
+            return app.send_static_file('index.html')
 
     return app
 

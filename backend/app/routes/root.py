@@ -6,7 +6,7 @@ from app.utils.responses import success_response
 root_bp = Blueprint('root', __name__)
 
 
-@root_bp.get('/')
+@root_bp.get('')
 def api_root():
     return success_response(
         'CyberShield API is running',

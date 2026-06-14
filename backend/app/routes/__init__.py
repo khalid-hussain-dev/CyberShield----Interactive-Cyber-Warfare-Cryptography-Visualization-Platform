@@ -11,7 +11,7 @@ from app.routes.duel import duel_bp
 
 
 def register_routes(app):
-    app.register_blueprint(root_bp)
+    app.register_blueprint(root_bp, url_prefix='/api')
     app.register_blueprint(health_bp, url_prefix='/api')
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
     app.register_blueprint(crypto_bp, url_prefix='/api/crypto')
