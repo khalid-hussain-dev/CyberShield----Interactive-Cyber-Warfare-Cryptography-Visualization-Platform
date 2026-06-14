@@ -384,14 +384,14 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
                   <button
                     type="button"
                     onClick={() => setSidebarOpen(!sidebarOpen)}
-                    className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-cyber-border bg-cyber-panelSoft text-cyber-text hover:border-cyber-blue"
+                    className="inline-flex h-9 w-9 items-center justify-center rounded-lg border border-cyber-border bg-cyber-panelSoft text-cyber-text hover:border-cyber-blue transition-colors"
                   >
-                    <Menu className="h-5 w-5" />
+                    <Menu className="h-4 w-4" />
                   </button>
                   <NavbarLogo tone={logoTone} />
                   <div>
-                    <p className="text-xs font-semibold uppercase text-cyber-muted">Cryptography &amp; Network Security</p>
-                    <h1 className="text-2xl font-semibold text-cyber-text">CyberShield Command Center</h1>
+                    <p className="text-[10px] font-bold uppercase tracking-widest text-cyber-muted">Cryptography &amp; Network Security</p>
+                    <h1 className="text-lg font-bold leading-tight text-cyber-text">CyberShield Command Center</h1>
                   </div>
                 </div>
               </div>
@@ -399,10 +399,10 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
             <div className="flex flex-wrap items-center gap-2">
               <BackendStatus health={backendHealth} />
               <StatusPill tone={realtime.connection.status === 'online' ? 'green' : realtime.connection.status === 'connecting' ? 'yellow' : 'red'}>
-                {realtime.connection.status === 'online' ? 'Realtime Live' : realtime.connection.status === 'connecting' ? 'Realtime Sync' : 'Realtime Offline'}
+                {realtime.connection.status === 'online' ? 'Live' : realtime.connection.status === 'connecting' ? 'Sync' : 'Offline'}
               </StatusPill>
-              <StatusPill tone={logoTone}>{!launched ? 'Neutral' : defenseEnabled ? 'Threat Neutralized' : 'Attack Running'}</StatusPill>
-              <StatusPill tone={defenseEnabled ? 'green' : 'yellow'}>{defenseEnabled ? 'Defense Active' : 'Defense Ready'}</StatusPill>
+              <StatusPill tone={logoTone}>{!launched ? 'Neutral' : defenseEnabled ? 'Neutralized' : 'Under Attack'}</StatusPill>
+              <StatusPill tone={defenseEnabled ? 'green' : 'yellow'}>{defenseEnabled ? 'Defense ON' : 'Defense Ready'}</StatusPill>
               <StatusPill tone="blue">{authSession.session.user.username}</StatusPill>
               <OperatorScore token={authSession.session.token} scoreRef={scoreRef} />
               <button
@@ -463,20 +463,20 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
         </header>
         </div>
 
-        <div className="px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto flex max-w-[1480px] flex-col gap-4">
-        <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="px-5 sm:px-7 lg:px-10 pb-6">
+        <div className="mx-auto content-grid max-w-[1480px]">
+        <section className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4 fade-in-section">
           {simulationState.metrics.map((metric) => (
             <MetricCard key={metric.label} metric={metric} />
           ))}
         </section>
 
-        <section className="grid grid-cols-1 gap-4 xl:grid-cols-[320px_minmax(0,1fr)_320px]">
+        <section className="grid grid-cols-1 gap-6 xl:grid-cols-[320px_minmax(0,1fr)_300px] fade-in-section">
           <SectionPanel title="Scenario Engine" icon={Zap}>
             <ScenarioRail scenarios={simulation.scenarios} selectedScenarioId={selectedScenarioId} onSelect={handleScenarioSelect} />
           </SectionPanel>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-6">
             <SectionPanel
               title={selectedScenario?.name ?? 'Attack Visualization'}
               icon={Radar}
@@ -505,7 +505,7 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
             )}
           </div>
 
-          <div className="grid gap-4">
+          <div className="grid gap-6">
             <SectionPanel title="Live Alerts" icon={Activity}>
               <EventFeed alerts={simulationState.alerts} />
             </SectionPanel>
@@ -523,7 +523,7 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
           </div>
         </section>
 
-        <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <section className="grid grid-cols-1 gap-6 lg:grid-cols-2 fade-in-section">
           <SectionPanel title="Hacker Terminal" icon={Terminal}>
             <TerminalStream entries={attackStream} tone="red" />
           </SectionPanel>
@@ -532,8 +532,8 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
           </SectionPanel>
         </section>
 
-        <section className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <div id="ids-analysis" className="flex flex-col gap-4">
+        <section className="grid grid-cols-1 gap-6 lg:grid-cols-2 fade-in-section">
+          <div id="ids-analysis" className="flex flex-col gap-6">
             <SectionPanel title="AI-IDS Analysis" icon={Shield}>
               <IDSPanel packets={simulationState.packets} token={authSession.session.token} />
             </SectionPanel>
@@ -544,7 +544,7 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
           </SectionPanel>
         </section>
 
-        <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+        <section className="grid grid-cols-1 gap-6 lg:grid-cols-3 fade-in-section">
           <SectionPanel title="Operator Audit Log" icon={Download}>
             {auditHistory.length === 0 ? (
               <p className="py-3 text-center text-xs text-cyber-muted">No audit records yet. Export a report to start archiving.</p>
@@ -567,21 +567,21 @@ function Dashboard({ authSession, onViewPlayground, onViewDuel }) {
             )}
           </SectionPanel>
 
-          <div id="blockchain-explorer" className="flex flex-col gap-4">
+          <div id="blockchain-explorer" className="flex flex-col gap-6">
             <SectionPanel title="Blockchain Explorer" icon={Shield}>
               <BlockchainExplorer token={authSession.session.token} />
             </SectionPanel>
           </div>
 
-          <div id="leaderboard" className="flex flex-col gap-4">
+          <div id="leaderboard" className="flex flex-col gap-6">
             <SectionPanel title="Cyber Range Leaderboard" icon={Activity}>
               <Leaderboard token={authSession.session.token} />
             </SectionPanel>
           </div>
         </section>
 
-        <section className="grid grid-cols-1 gap-4 2xl:grid-cols-[minmax(0,1.08fr)_minmax(380px,0.92fr)]">
-          <div id="explain-mode" className="flex flex-col gap-4">
+        <section className="grid grid-cols-1 gap-6 2xl:grid-cols-[minmax(0,1.08fr)_minmax(380px,0.92fr)] fade-in-section">
+          <div id="explain-mode" className="flex flex-col gap-6">
             <SectionPanel title="Explain Mode" icon={BookOpen}>
               <ExplainModePanel explanation={explanation} />
             </SectionPanel>

@@ -251,3 +251,197 @@ button:focus-visible {
     text-align: center;
   }
 }
+
+/* ═══════════════════════════════════════════════════════
+   PREMIUM DESIGN SYSTEM
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Panel Cards ──────────────────────────────────────── */
+.panel-card {
+  position: relative;
+  border-radius: 14px;
+  border: 1px solid rgba(59, 130, 246, 0.10);
+  background: linear-gradient(
+    155deg,
+    rgba(16, 24, 48, 0.92) 0%,
+    rgba(11, 16, 32, 0.96) 100%
+  );
+  box-shadow:
+    0 1px 0 rgba(59, 130, 246, 0.08) inset,
+    0 8px 32px rgba(0, 0, 0, 0.40),
+    0 1px 0 rgba(255, 255, 255, 0.03) inset;
+  overflow: hidden;
+  transition: box-shadow 0.25s ease, transform 0.22s ease, border-color 0.25s ease;
+}
+.panel-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(59, 130, 246, 0.55) 40%,
+    rgba(52, 211, 153, 0.30) 70%,
+    transparent 100%
+  );
+  z-index: 1;
+}
+.panel-card:hover {
+  border-color: rgba(59, 130, 246, 0.22);
+  box-shadow:
+    0 1px 0 rgba(59, 130, 246, 0.08) inset,
+    0 12px 40px rgba(0, 0, 0, 0.50),
+    0 0 0 1px rgba(59, 130, 246, 0.06);
+  transform: translateY(-1px);
+}
+
+/* Panel header */
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.08);
+  min-height: 52px;
+}
+.panel-header-left {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  min-width: 0;
+}
+.panel-icon-ring {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.22);
+  color: #3b82f6;
+  flex-shrink: 0;
+}
+.panel-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+}
+
+/* Panel body */
+.panel-body {
+  padding: 1.25rem;
+}
+
+/* ── Metric Cards ─────────────────────────────────────── */
+.metric-card {
+  position: relative;
+  border-radius: 14px;
+  border: 1px solid rgba(59, 130, 246, 0.10);
+  background: linear-gradient(
+    155deg,
+    rgba(16, 24, 48, 0.92) 0%,
+    rgba(11, 16, 32, 0.96) 100%
+  );
+  overflow: hidden;
+  transition: transform 0.22s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+.metric-card:hover {
+  transform: translateY(-3px) scale(1.01);
+  border-color: rgba(59, 130, 246, 0.22);
+}
+.metric-card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 1;
+}
+.metric-card-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+  margin: 0 0 0.5rem 0;
+}
+.metric-card-value {
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #e2e8f0;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.6rem 0;
+  font-variant-numeric: tabular-nums;
+}
+.metric-card-trend {
+  font-size: 0.72rem;
+  color: #475569;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.metric-card-icon-ring {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+/* ── Scroll Fade-In Animation ─────────────────────────── */
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-in-section {
+  animation: fade-up 0.45s ease both;
+}
+.fade-in-section:nth-child(1) { animation-delay: 0.05s; }
+.fade-in-section:nth-child(2) { animation-delay: 0.10s; }
+.fade-in-section:nth-child(3) { animation-delay: 0.15s; }
+.fade-in-section:nth-child(4) { animation-delay: 0.20s; }
+
+/* ── Premium Scrollbar (thinner) ──────────────────────── */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.25);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.55);
+}
+
+/* ── Layout spacing upgrades ──────────────────────────── */
+.content-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
